@@ -5,22 +5,7 @@ import time
 
 class BaseAPIHandler:
     BASE_URL = "http://irbis.pushkinlibrary.kz:8087/jirbis2/components/com_irbis/ajax_provider.php"
-
-class BookSearchHandler(BaseAPIHandler):
-
-    def __init__(self, search_params):
-        self.session = requests.Session()
-        self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-            'Accept': 'application/json, text/plain, */*',
-            'Accept-Language': 'en-US,en;q=0.9',
-            'Connection': 'keep-alive',
-            'Cache-Control': 'no-cache'
-        })
-        self.search_params = search_params
-        self.client_request_id = self._generate_random_number_string(10)
-        self.form_request_id = self._generate_random_number_string(10)
-
+    
     @staticmethod
     def _generate_random_string(length=8):
         characters = string.ascii_letters + string.digits
@@ -38,12 +23,27 @@ class BookSearchHandler(BaseAPIHandler):
 
     def _post_request(self, data):
         response = self.session.post(self.BASE_URL, data=data)
-        print(response.text)
         return self._check_response(response)
 
     def _get_request(self, url):
         response = self.session.get(url)
         return self._check_response(response)
+
+class BookSearchHandler(BaseAPIHandler):
+
+    def __init__(self, search_params):
+        self.session = requests.Session()
+        self.session.headers.update({
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'application/json, text/plain, */*',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Connection': 'keep-alive',
+            'Cache-Control': 'no-cache'
+        })
+        self.search_params = search_params
+        self.client_request_id = self._generate_random_number_string(10)
+        self.form_request_id = self._generate_random_number_string(10)
+
 
     def _search_request(self):
         data = {
